@@ -27,6 +27,11 @@ const adminStorefrontLinks = [
   ['My orders', '/orders'],
 ]
 
+const guestLinks = [
+  ['Home', '/'],
+  ['Cakes', '/catalogue'],
+]
+
 function App() {
   const [authStatus, setAuthStatus] = useState(() => (
     sessionStorage.getItem('accessToken') ? 'loading' : 'guest'
@@ -34,7 +39,12 @@ function App() {
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
   const cakeMatch = path.match(/^\/cakes\/(\d+)$/)
   const isAdminPath = path === '/admin' || path.startsWith('/admin/')
-  const links = authStatus === 'superuser' ? adminStorefrontLinks : customerLinks
+  const links =
+    authStatus === 'consumer'
+      ? customerLinks
+      : authStatus === 'superuser'
+        ? adminStorefrontLinks
+        : guestLinks
 
   useEffect(() => {
     let isCurrent = true
@@ -75,7 +85,7 @@ function App() {
 
   let page
   if (isAdminPath) page = <AdminPage path={path} authStatus={authStatus} />
-  else if (path === '/catalogue') page = <Catalogue />
+  else if (path === '/catalogue') page = <Catalogue authStatus={authStatus} />
   else if (cakeMatch) page = <CakeDetails cakeId={cakeMatch[1]} />
   else if (path === '/cart') page = <Cart />
   else if (path === '/checkout') page = <Checkout />
@@ -89,7 +99,7 @@ function App() {
     <div className="site-shell">
       {!isAdminPath && <header className="site-header">
         <a className="brand" href="/" aria-label="Sweet Crumbs home">
-          <img src="./cropped_circle_image.png" height="70" width="70" alt="Ankits's Homebake" />
+          <img src="/cropped_circle_image.png" height="70" width="70" alt="Ankits's Homebake" />
           <span>Ankita's Homebake</span>
         </a>
         <nav className="main-nav" aria-label="Main navigation">
@@ -107,9 +117,9 @@ function App() {
         <div className="account-actions">
           {authStatus === 'consumer' || authStatus === 'superuser'
             ? <>
-                <a className="account-link" href="/profile">My account</a>
-                <button className="account-link account-button" type="button" onClick={handleSignOut}>Sign out</button>
-              </>
+              <a className="account-link" href="/profile">My account</a>
+              <button className="account-link account-button" type="button" onClick={handleSignOut}>Sign out</button>
+            </>
             : authStatus === 'loading'
               ? <span className="account-link">Checking account…</span>
               : <a className="account-link" href="/login">Sign in</a>}

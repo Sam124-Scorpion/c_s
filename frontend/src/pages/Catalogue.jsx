@@ -1,55 +1,55 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
-import { addToCart as addCakeToCart, getCakes, getMediaUrl, getCurrentUser } from '../services/api.js'
+import { addToCart as addCakeToCart, getCakes, getMediaUrl} from '../services/api.js'
 
-function Catalogue() {
+function Catalogue({ authStatus }) {
   const [cakes, setCakes] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [addingCakeId, setAddingCakeId] = useState(null)
-  const [user, setUser] = useState(null)
-  const [authLoading, setAuthLoading] = useState(true)
+  // const [user, setUser] = useState(null)
+  // const [authLoading, setAuthLoading] = useState(true)
 
 
 
-  useEffect(() => {
-    let isCurrent = true
+  // useEffect(() => {
+  //   let isCurrent = true
 
-    async function loadUser() {
-      const accessToken = sessionStorage.getItem('accessToken')
+  //   // async function loadUser() {
+  //   //   const accessToken = sessionStorage.getItem('accessToken')
 
-      if (!accessToken) {
-        if (isCurrent) {
-          setUser(null)
-          setAuthLoading(false)
-        }
-        return
-      }
+  //   //   if (!accessToken) {
+  //   //     if (isCurrent) {
+  //   //       setUser(null)
+  //   //       setAuthLoading(false)
+  //   //     }
+  //   //     return
+  //   //   }
 
-      try {
-        const currentUser = await getCurrentUser()
+  //   //   try {
+  //   //     const currentUser = await getCurrentUser()
 
-        if (isCurrent) {
-          setUser(currentUser)
-        }
-      } catch {
-        if (isCurrent) {
-          setUser(null)
-        }
-      } finally {
-        if (isCurrent) {
-          setAuthLoading(false)
-        }
-      }
-    }
+  //   //     if (isCurrent) {
+  //   //       setUser(currentUser)
+  //   //     }
+  //   //   } catch {
+  //   //     if (isCurrent) {
+  //   //       setUser(null)
+  //   //     }
+  //   //   } finally {
+  //   //     if (isCurrent) {
+  //   //       setAuthLoading(false)
+  //   //     }
+  //   //   }
+  //   // }
 
-    loadUser()
+  //   // loadUser()
 
-    return () => {
-      isCurrent = false
-    }
-  }, [])
+  //   return () => {
+  //     isCurrent = false
+  //   }
+  // }, [])
 
   async function addToCart(cake) {
     setAddingCakeId(cake.id)
@@ -79,11 +79,13 @@ function Catalogue() {
   }, [])
 
 
-  const isCustomer =
-  !authLoading &&
-  user &&
-  !user.is_superuser &&
-  !user.is_staff
+  // const isCustomer =
+  // !authLoading &&
+  // user &&
+  // !user.is_superuser &&
+  // !user.is_staff
+
+  const isCustomer = authStatus === 'consumer'
 
 
   return (
