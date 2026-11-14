@@ -1302,3 +1302,28 @@ h2 {
     gap: 7px;
   }
 }
+
+.site-footer {
+  width: 100%;
+  margin-top: 4rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  border-top: 1px solid rgba(80, 40, 40, 0.15);
+  background: #fffaf7;
+  color: #765f5a;
+  box-sizing: border-box;
+}
+
+.site-footer p {
+  margin: 0.35rem 0;
+}
+
+.site-credit {
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.site-credit strong {
+  font-weight: 700;
+  color: #9b4059;
+}

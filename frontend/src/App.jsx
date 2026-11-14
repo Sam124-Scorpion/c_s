@@ -126,11 +126,23 @@ function App() {
         </div>
       </header>}
       <main>{page}</main>
-      <ToastContainer position="top-right" autoClose={2800} newestOnTop closeOnClick pauseOnHover />
-      {!isAdminPath && <footer className="site-footer">
-        <a className="brand footer-brand" href="/">Sweet Crumbs</a>
-        <p>Made with care, one slice at a time.</p>
-      </footer>}
+
+<ToastContainer
+  position="top-right"
+  autoClose={2800}
+  newestOnTop
+  closeOnClick
+  pauseOnHover
+/>
+
+<footer className="site-footer">
+  <p>
+    © {new Date().getFullYear()} Ankita's Homebake. All rights reserved.
+  </p>
+  <p className="site-credit">
+    Designed & Developed by <strong>Sam Creative Company</strong>
+  </p>
+</footer>
     </div>
   )
 }
