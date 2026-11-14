@@ -1,12 +1,55 @@
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
-import { addToCart as addCakeToCart, getCakes, getMediaUrl } from '../services/api.js'
+
+import { addToCart as addCakeToCart, getCakes, getMediaUrl, getCurrentUser } from '../services/api.js'
 
 function Catalogue() {
   const [cakes, setCakes] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [addingCakeId, setAddingCakeId] = useState(null)
+  const [user, setUser] = useState(null)
+  const [authLoading, setAuthLoading] = useState(true)
+
+
+
+  useEffect(() => {
+    let isCurrent = true
+
+    async function loadUser() {
+      const accessToken = sessionStorage.getItem('accessToken')
+
+      if (!accessToken) {
+        if (isCurrent) {
+          setUser(null)
+          setAuthLoading(false)
+        }
+        return
+      }
+
+      try {
+        const currentUser = await getCurrentUser()
+
+        if (isCurrent) {
+          setUser(currentUser)
+        }
+      } catch {
+        if (isCurrent) {
+          setUser(null)
+        }
+      } finally {
+        if (isCurrent) {
+          setAuthLoading(false)
+        }
+      }
+    }
+
+    loadUser()
+
+    return () => {
+      isCurrent = false
+    }
+  }, [])
 
   async function addToCart(cake) {
     setAddingCakeId(cake.id)
@@ -35,6 +78,14 @@ function Catalogue() {
     return () => { isCurrent = false }
   }, [])
 
+
+  const isCustomer =
+  !authLoading &&
+  user &&
+  !user.is_superuser &&
+  !user.is_staff
+
+
   return (
     <section className="page-section">
       <div className="page-heading">
@@ -62,16 +113,18 @@ function Catalogue() {
                 <p className="cake-category">{cake.category?.name || 'Freshly baked'}</p>
                 <div className="cake-card-header">
                   <h2><a href={`/cakes/${cake.id}`}>{cake.name}</a></h2>
-                  <button
-                    className="catalogue-add-button"
-                    type="button"
-                    disabled={addingCakeId !== null}
-                    onClick={() => addToCart(cake)}
-                  >
+                  {isCustomer && (
+                    <button
+                      className="catalogue-add-button"
+                      type="button"
+                      disabled={addingCakeId !== null}
+                      onClick={() => addToCart(cake)}
+                    >
                     {addingCakeId === cake.id ? 'Adding…' : 'Add to cart'}
                   </button>
+                  )}
                 </div>
-               
+
                 <p className="cake-description">{cake.description || 'A delicious treat for a special day.'}</p>
                 <div className="cake-card-bottom">
                   <strong>₹{Number(cake.price).toFixed(2)}</strong>

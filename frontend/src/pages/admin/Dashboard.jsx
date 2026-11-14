@@ -29,7 +29,7 @@ function Dashboard() {
     <div>
       <div className="admin-page-heading">
         <div>
-          <p className="eyebrow">Sweet Crumbs administration</p>
+          <p className="eyebrow">Ankita's Homebake administration</p>
           <h1>Shop overview</h1>
         </div>
         <a className="admin-outline-button" href="/catalogue">View storefront ↗</a>
