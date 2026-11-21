@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function Profile() {
   return (
     <section className="page-section narrow-section">
@@ -10,7 +12,7 @@ function Profile() {
         <span aria-hidden="true">♡</span>
         <h2>Profile details are not available yet</h2>
         <p>Account registration and sign-in are available, but profile management is not connected yet.</p>
-        <a className="button button-primary" href="/login">Sign in</a>
+        <Link className="button button-primary" to="/login">Sign in</Link>
       </div>
     </section>
   )

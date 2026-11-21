@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { getMyOrders } from '../services/api.js'
 
 function MyOrders() {
@@ -40,7 +41,7 @@ function MyOrders() {
         <div className="empty-state">
           <h2>Sign in to view your orders</h2>
           <p>Your order history is linked to your account.</p>
-          <a className="button button-primary" href="/login">Sign in</a>
+          <Link className="button button-primary" to="/login">Sign in</Link>
         </div>
       )}
       {!loading && !requiresSignIn && error && (
@@ -51,7 +52,7 @@ function MyOrders() {
           <span aria-hidden="true">📦</span>
           <h2>No orders yet</h2>
           <p>Your next celebration cake is just a browse away.</p>
-          <a className="button button-primary" href="/catalogue">Explore the cakes</a>
+          <Link className="button button-primary" to="/catalogue">Explore the cakes</Link>
         </div>
       )}
       {!loading && !requiresSignIn && !error && orders.length > 0 && (

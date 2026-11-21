@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { register } from '../services/api.js'
 
 function Register() {
@@ -55,12 +56,12 @@ function Register() {
             <input name="password2" type="password" autoComplete="new-password" required value={form.password2} onChange={updateField} />
           </label>
           {error && <p className="form-error" role="alert">{error}</p>}
-          {success && <p className="form-success" role="status">Your account is ready. <a href="/login">Sign in</a>.</p>}
+          {success && <p className="form-success" role="status">Your account is ready. <Link to="/login">Sign in</Link>.</p>}
           <button className="button button-primary" type="submit" disabled={submitting}>
             {submitting ? 'Creating account…' : 'Create account'}
           </button>
         </form>
-        <p className="auth-switch">Already have an account? <a href="/login">Sign in</a></p>
+        <p className="auth-switch">Already have an account? <Link to="/login">Sign in</Link></p>
       </div>
     </section>
   )

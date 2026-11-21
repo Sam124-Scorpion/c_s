@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { createOrder, getCart, submitPaymentReference } from '../services/api.js'
 
 function Checkout() {
@@ -88,7 +89,7 @@ function Checkout() {
         <div className="empty-state">
           <h2>Sign in to checkout</h2>
           <p>Your cart and delivery details are available after you sign in.</p>
-          <a className="button button-primary" href="/login">Sign in</a>
+          <Link className="button button-primary" to="/login">Sign in</Link>
         </div>
       )}
       {!loading && !requiresSignIn && error && items.length === 0 && !placedOrder && (
@@ -98,7 +99,7 @@ function Checkout() {
         <div className="empty-state">
           <h2>Your cart is empty</h2>
           <p>Add a cake before continuing to checkout.</p>
-          <a className="button button-secondary" href="/catalogue">Back to the cakes</a>
+          <Link className="button button-secondary" to="/catalogue">Back to the cakes</Link>
         </div>
       )}
 
@@ -232,9 +233,9 @@ function Checkout() {
             </div>
           )}
 
-          <a className="button button-primary" href="/orders">
+          <Link className="button button-primary" to="/orders">
             View my orders
-          </a>
+          </Link>
         </div>
       )}
 
@@ -323,3 +324,4 @@ function Checkout() {
 }
 
 export default Checkout
+

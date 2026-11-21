@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 function Home() {
   return (
     <section className="hero-section">
@@ -8,7 +10,7 @@ function Home() {
           Discover freshly made cakes for birthdays, celebrations, and all the
           lovely moments in between.
         </p>
-        <a className="button button-primary" href="/catalogue">Explore the cakes</a>
+        <Link className="button button-primary" to="/catalogue">Explore the cakes</Link>
       </div>
       <div className="hero-art" role="img" aria-label="A freshly baked celebration cake">
         <span className="hero-sparkle sparkle-one" aria-hidden="true">✦</span>

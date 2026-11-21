@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { getCart, getMediaUrl, removeCartItem, updateCartItem } from '../services/api.js'
 
 function Cart() {
@@ -71,7 +72,7 @@ function Cart() {
         <div className="empty-state">
           <h2>Sign in to see your cart</h2>
           <p>Your saved cakes are waiting for you.</p>
-          <a className="button button-primary" href="/login">Sign in</a>
+          <Link className="button button-primary" to="/login">Sign in</Link>
         </div>
       )}
       {!loading && !requiresSignIn && error && (
@@ -82,7 +83,7 @@ function Cart() {
           <span aria-hidden="true">🧁</span>
           <h2>Your cart is waiting for something sweet</h2>
           <p>Browse the catalogue to discover a cake for your next celebration.</p>
-          <a className="button button-primary" href="/catalogue">Browse cakes</a>
+          <Link className="button button-primary" to="/catalogue">Browse cakes</Link>
         </div>
       )}
       {!loading && !requiresSignIn && items.length > 0 && (
@@ -94,13 +95,13 @@ function Cart() {
               const isBusy = busyItemId === item.id
               return (
                 <article className="cart-item" key={item.id}>
-                  <a className="cart-item-image" href={`/cakes/${item.cake}`}>
+                  <Link className="cart-item-image" to={`/cakes/${item.cake}`}>
                     {image
                       ? <img src={image} alt={item.cake_name} />
                       : <span aria-hidden="true">🍰</span>}
-                  </a>
+                  </Link>
                   <div className="cart-item-details">
-                    <h2><a href={`/cakes/${item.cake}`}>{item.cake_name}</a></h2>
+                    <h2><Link to={`/cakes/${item.cake}`}>{item.cake_name}</Link></h2>
                     <p>₹{Number(item.cake_price).toFixed(2)} each</p>
                     <button
                       className="cart-remove"
@@ -135,8 +136,8 @@ function Cart() {
           </div>
           <div className="cart-summary">
             <p><span>Subtotal</span><strong>₹{Number(cart.total_price).toFixed(2)}</strong></p>
-            <a className="button button-primary" href="/checkout">Continue to checkout</a>
-            <a className="cart-continue" href="/catalogue">Continue shopping</a>
+            <Link className="button button-primary" to="/checkout">Continue to checkout</Link>
+            <Link className="cart-continue" to="/catalogue">Continue shopping</Link>
           </div>
         </div>
       )}

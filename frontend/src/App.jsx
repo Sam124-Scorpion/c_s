@@ -1,18 +1,20 @@
 import 'react-toastify/dist/ReactToastify.css'
 import './App.css'
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
+import { BrowserRouter, Link, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { getCurrentUser } from './services/api.js'
-import CakeDetails from './pages/CakeDetails.jsx'
-import Cart from './pages/Cart.jsx'
-import Catalogue from './pages/Catalogue.jsx'
-import Checkout from './pages/Checkout.jsx'
-import Home from './pages/Home.jsx'
-import Login from './pages/Login.jsx'
-import MyOrders from './pages/MyOrders.jsx'
-import Profile from './pages/Profile.jsx'
-import Register from './pages/Register.jsx'
-import AdminPage from './pages/admin/page.jsx'
+
+const CakeDetails = lazy(() => import('./pages/CakeDetails.jsx'))
+const Cart = lazy(() => import('./pages/Cart.jsx'))
+const Catalogue = lazy(() => import('./pages/Catalogue.jsx'))
+const Checkout = lazy(() => import('./pages/Checkout.jsx'))
+const Home = lazy(() => import('./pages/Home.jsx'))
+const Login = lazy(() => import('./pages/Login.jsx'))
+const MyOrders = lazy(() => import('./pages/MyOrders.jsx'))
+const Profile = lazy(() => import('./pages/Profile.jsx'))
+const Register = lazy(() => import('./pages/Register.jsx'))
+const AdminPage = lazy(() => import('./pages/admin/page.jsx'))
 
 const customerLinks = [
   ['Home', '/'],
@@ -32,12 +34,13 @@ const guestLinks = [
   ['Cakes', '/catalogue'],
 ]
 
-function App() {
+function AppShell() {
+  const location = useLocation()
+  const navigate = useNavigate()
   const [authStatus, setAuthStatus] = useState(() => (
     sessionStorage.getItem('accessToken') ? 'loading' : 'guest'
   ))
-  const path = window.location.pathname.replace(/\/+$/, '') || '/'
-  const cakeMatch = path.match(/^\/cakes\/(\d+)$/)
+  const path = location.pathname.replace(/\/+$/, '') || '/'
   const isAdminPath = path === '/admin' || path.startsWith('/admin/')
   const links =
     authStatus === 'consumer'
@@ -80,52 +83,56 @@ function App() {
     sessionStorage.removeItem('accessToken')
     sessionStorage.removeItem('refreshToken')
     window.dispatchEvent(new Event('authchange'))
-    window.location.assign('/')
+    navigate('/')
   }
-
-  let page
-  if (isAdminPath) page = <AdminPage path={path} authStatus={authStatus} />
-  else if (path === '/catalogue') page = <Catalogue authStatus={authStatus} />
-  else if (cakeMatch) page = <CakeDetails cakeId={cakeMatch[1]} />
-  else if (path === '/cart') page = <Cart />
-  else if (path === '/checkout') page = <Checkout />
-  else if (path === '/orders') page = <MyOrders />
-  else if (path === '/profile') page = <Profile />
-  else if (path === '/login') page = <Login />
-  else if (path === '/register') page = <Register />
-  else page = <Home />
 
   return (
     <div className="site-shell">
       {!isAdminPath && <header className="site-header">
-        <a className="brand" href="/" aria-label="Sweet Crumbs home">
+        <Link className="brand" to="/" aria-label="Sweet Crumbs home">
           <img src="/cropped_circle_image.png" height="70" width="70" alt="Ankits's Homebake" />
           <span>Ankita's Homebake</span>
-        </a>
+        </Link>
         <nav className="main-nav" aria-label="Main navigation">
           {links.map(([label, href]) => (
-            <a className={path === href ? 'active' : ''} href={href} key={href}>
+            <Link className={path === href ? 'active' : ''} to={href} key={href}>
               {label}
-            </a>
+            </Link>
           ))}
           {authStatus === 'superuser' && (
-            <a className={path.startsWith('/admin') ? 'active' : ''} href="/admin" key="/admin">
+            <Link className={path.startsWith('/admin') ? 'active' : ''} to="/admin" key="/admin">
               Admin
-            </a>
+            </Link>
           )}
         </nav>
         <div className="account-actions">
           {authStatus === 'consumer' || authStatus === 'superuser'
             ? <>
-              <a className="account-link" href="/profile">My account</a>
+              <Link className="account-link" to="/profile">My account</Link>
               <button className="account-link account-button" type="button" onClick={handleSignOut}>Sign out</button>
             </>
             : authStatus === 'loading'
               ? <span className="account-link">Checking account…</span>
-              : <a className="account-link" href="/login">Sign in</a>}
+              : <Link className="account-link" to="/login">Sign in</Link>}
         </div>
       </header>}
-      <main>{page}</main>
+      <main>
+        <Suspense fallback={<section className="page-section"><p className="notice">Loading…</p></section>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/catalogue" element={<Catalogue authStatus={authStatus} />} />
+            <Route path="/cakes/:cakeId" element={<CakeDetails />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/orders" element={<MyOrders />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/admin/*" element={<AdminPage path={path} authStatus={authStatus} />} />
+            <Route path="*" element={<Home />} />
+          </Routes>
+        </Suspense>
+      </main>
 
 <ToastContainer
   position="top-right"
@@ -144,6 +151,14 @@ function App() {
   </p>
 </footer>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AppShell />
+    </BrowserRouter>
   )
 }
 

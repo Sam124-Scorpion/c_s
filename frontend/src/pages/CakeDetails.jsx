@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import { getCake, getMediaUrl } from '../services/api.js'
 
-function CakeDetails({ cakeId }) {
+function CakeDetails() {
+  const { cakeId } = useParams()
   const [cake, setCake] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -35,7 +37,7 @@ function CakeDetails({ cakeId }) {
         <p className="stock-note">
           {cake.stock > 0 ? `${cake.stock} available` : 'Currently out of stock'}
         </p>
-        <a className="button button-primary" href="/catalogue">Browse more cakes</a>
+        <Link className="button button-primary" to="/catalogue">Browse more cakes</Link>
         <p className="detail-hint">Cart and ordering services are not connected yet.</p>
       </div>
     </section>

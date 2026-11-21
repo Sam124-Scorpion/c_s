@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
   createCake,
   deleteCake,
@@ -148,7 +149,7 @@ function ManageCakes() {
     <div>
       <div className="admin-page-heading">
         <div><p className="eyebrow">Your product counter</p><h1>Manage cakes</h1></div>
-        <a className="admin-outline-button" href="/catalogue">View storefront ↗</a>
+        <Link className="admin-outline-button" to="/catalogue">View storefront ↗</Link>
       </div>
       {error && <p className="admin-error" role="alert">{error}</p>}
       <div className="admin-management-grid cake-management-grid">

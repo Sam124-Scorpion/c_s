@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 import { addToCart as addCakeToCart, getCakes, getMediaUrl} from '../services/api.js'
@@ -106,15 +107,15 @@ function Catalogue({ authStatus }) {
           const image = getMediaUrl(primary?.image)
           return (
             <article className="cake-card" key={cake.id}>
-              <a className="cake-card-image" href={`/cakes/${cake.id}`}>
+              <Link className="cake-card-image" to={`/cakes/${cake.id}`}>
                 {image
                   ? <img src={image} alt={cake.name} />
                   : <span aria-hidden="true">🍰</span>}
-              </a>
+              </Link>
               <div className="cake-card-content">
                 <p className="cake-category">{cake.category?.name || 'Freshly baked'}</p>
                 <div className="cake-card-header">
-                  <h2><a href={`/cakes/${cake.id}`}>{cake.name}</a></h2>
+                  <h2><Link to={`/cakes/${cake.id}`}>{cake.name}</Link></h2>
                   {isCustomer && (
                     <button
                       className="catalogue-add-button"
@@ -130,7 +131,7 @@ function Catalogue({ authStatus }) {
                 <p className="cake-description">{cake.description || 'A delicious treat for a special day.'}</p>
                 <div className="cake-card-bottom">
                   <strong>₹{Number(cake.price).toFixed(2)}</strong>
-                  <a href={`/cakes/${cake.id}`} aria-label={`View ${cake.name}`}>View cake <span aria-hidden="true">→</span></a>
+                  <Link to={`/cakes/${cake.id}`} aria-label={`View ${cake.name}`}>View cake <span aria-hidden="true">→</span></Link>
                 </div>
               </div>
             </article>

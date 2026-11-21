@@ -1,4 +1,5 @@
 import './admin.css'
+import { Link } from 'react-router-dom'
 import Dashboard from './Dashboard.jsx'
 import ManageCakes from './ManageCakes.jsx'
 import ManageOrders from './ManageOrders.jsx'
@@ -40,12 +41,12 @@ function AdminPage({ path, authStatus }) {
           </p>
           <div className="admin-access-actions">
             {isSignedIn
-              ? <a className="admin-primary-button" href="/">Go to storefront</a>
+              ? <Link className="admin-primary-button" to="/">Go to storefront</Link>
               : <>
-                  <a className="admin-primary-button" href={`/login?next=${encodeURIComponent(selectedPath)}`}>
+                  <Link className="admin-primary-button" to={`/login?next=${encodeURIComponent(selectedPath)}`}>
                     Sign in
-                  </a>
-                  <a className="admin-outline-button" href="/">Back to storefront</a>
+                  </Link>
+                  <Link className="admin-outline-button" to="/">Back to storefront</Link>
                 </>}
           </div>
         </section>
@@ -64,16 +65,16 @@ function AdminPage({ path, authStatus }) {
         <p className="admin-sidebar-label">Shop management</p>
         <nav aria-label="Administration">
           {sections.map((section) => (
-            <a
+            <Link
               className={selectedPath === section.path ? 'selected' : ''}
-              href={section.path}
+              to={section.path}
               key={section.path}
             >
               {section.label}
-            </a>
+            </Link>
           ))}
         </nav>
-        <a className="admin-back-link" href="/">← Back to shop</a>
+        <Link className="admin-back-link" to="/">← Back to shop</Link>
       </aside>
       <section className="admin-content">{content}</section>
     </div>

@@ -1,7 +1,9 @@
 import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { login } from '../services/api.js'
 
 function Login() {
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -21,7 +23,7 @@ function Login() {
       const destination = nextUrl?.origin === window.location.origin
         ? `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`
         : '/profile'
-      window.location.assign(destination)
+      navigate(destination)
     } catch (requestError) {
       setError(requestError.message)
     } finally {
@@ -49,7 +51,7 @@ function Login() {
             {submitting ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
-        <p className="auth-switch">New here? <a href="/register">Create an account</a></p>
+        <p className="auth-switch">New here? <Link to="/register">Create an account</Link></p>
       </div>
     </section>
   )
